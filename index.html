@@ -9,199 +9,61 @@
       <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
       <meta id="extViewportMeta" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
       <title>Media Player</title>
-      <script src="./js/TweenMax.min.js" type="text/javascript"></script>
+      <script src="./js/TweenMax.min.js"  type="text/javascript"></script>
       <script src="./js/tcsConf.js"       type="text/javascript"></script>
-      <script src="./js/tcsSocket.js" type="text/javascript"></script>
-      <script src="./js/tcsApp.js"       type="text/javascript"></script>
-
+      <script src="./js/tcsSocket.js"     type="text/javascript"></script>
+      <script src="./js/tcsApp.js"        type="text/javascript"></script>
+      <script src="./js/reactionGameReaderboard.js" type="text/javascript"></script>
       <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
       <link rel="stylesheet" type="text/css" href="./css/style.css">
 
       <style>
           html, body {margin: 0; padding: 0; overflow: hidden}
           #mContainer{
-            height:1280px;
-            width:720px;
-            border:1px dashed #FFFFFF;
+
           }
           #mContainerWrapper{
-            position: relative;
-            width: 100%;
-            height: 100%;
+              width:100%;
           }
-          #mContainerWrapper  video {
-             position: absolute;
-             top: 0;
-             left: 0;
-             width: 100%;
-             height: 100%;
+
+
+          .board-item{
+            border-bottom: 1px dashed #666666;
+            width:100%;
+            display:table;
           }
-          #mContainerWrapper  img {
-             position: absolute;
-             top: 0;
-             left: 0;
-             width: 100%;
-             height: 100%;
+          .board-item-active{
+            background-color:#999999;
+          }
+          .board-item .pos{
+            display:table-cell;
+            width:10%;
+          }
+          .board-item .team{
+            display:table-cell;
+            width:10%;
+          }
+          .board-item .team img{
+            width:60px;
+            height:40px;
+          }
+          .board-item .uname{
+            display:table-cell;
+            width:70%;
+            text-align:left;
+          }
+          .board-item .score{
+            display:table-cell;
+            width:10%;
           }
       </style>
 
       <script type="text/javascript">
-
-
-
-      // var ipc = require('electron').ipcRenderer;
-      // var authButton = document.getElementById('auth-button');
-      // authButton.addEventListener('click', function(){
-      //     ipc.once('actionReply', function(event, response){
-      //         processResponse(response);
-      //     })
-      //     ipc.send('invokeAction', 'someData');
-      // });
-
-try{
-  var ipcRender = require('electron').ipcRenderer;
-      ipcRender.on('arduinoData', function(event, data){
-        console.log("arduinoData : "+data);
-      });
-    ipcRender.send("arduinoCommand","STRAT :: ");
-}catch(e){
-    console.log(e);
-}
-
-
-
-
         pages = ["mContainer"];
-
-        var playlist = ["colgate_2.mp4","demo1.jpg","demo2.jpg","kumho_1.mp4","levis_2.mp4"];
-        var sequenceIndex = 0;
-        var sequenceTotal = playlist.length;
-
-         function $$(id){ return document.getElementById(id); }
-
-         function minVideo(){
-           TweenMax.to( $$("mContainerWrapper"),1,{width:"20%",height:"20%"});
-         }
-         function maxVideo(){
-          TweenMax.to( $$("mContainerWrapper"),1,{width:"100%",height:"100%"});
-         }
-         var interval;// = setInterval(framecheck,30);
-         var timeout;
-         var videoPlayer;
-         var imgPlayer;
-         var currentPlayer;
-         var syncmode = true;
-         var syncmodeMaster = false;
-         var istransition = false;
-
-         document.addEventListener("onSocketMessage",onSocketMessage);
-         document.addEventListener("onSocketClose",onSocketClose);
-         document.addEventListener("onSocketError",onSocketError);
-         document.addEventListener("onSocketOpen",onSocketOpen);
-
-         function pageInit(){
-
-          syncmodeMaster = conf.IS_MASTER=="Y"?true:false;
-          playSequence(-1);
-          console.log("syncmodeMaster : "+syncmodeMaster)
-         }
-
-         function framecheck(){
-           var logTxt = "";
-           var current = videoPlayer.currentTime;
-           var duration = videoPlayer.duration;
-           if(duration!=NaN && duration>1.0 && current>1.0){
-              logTxt =  current+"/"+duration;
-              if(duration - current<1){
-                clearInterval(interval);
-                masterSequenceAction();
-              }
-           }
-           $$("vstatus").innerHTML = logTxt;
-         }
-         function imageframeCheck(){
-           masterSequenceAction();
-         }
-         function masterSequenceAction(){
-           if(syncmode){
-             if(syncmodeMaster){
-               tcssocket.send("ALL","SEQUENCE_PLAY",(parseInt(sequenceIndex)+1));
-             }
-           }else{
-             dimoutCurrent(-1);
-           }
-         }
-         function dimoutCurrent(n){
-           istransition = true;
-           TweenMax.to(currentPlayer,1,{opacity:"0"});
-           timeout = setTimeout(playSequence,1000,n);
-         }
-
-
-         function playSequence(n){
-           if(currentPlayer){
-             if(videoPlayer == currentPlayer){
-               videoPlayer.pause();
-                $$("mContainerWrapper").removeChild(videoPlayer);
-                delete videoPlayer;
-             }else{
-                $$("mContainerWrapper").removeChild(imgPlayer);
-                delete imgPlayer;
-             }
-           }
-
-           if(n<0){
-             sequenceIndex++;
-           }else{
-             sequenceIndex = n;
-           }
-           if(sequenceIndex == sequenceTotal)sequenceIndex = 0;
-
-           var mediaUrl = playlist[sequenceIndex];
-           if(mediaUrl.substring(mediaUrl.lastIndexOf(".")+1) == "mp4"){
-             videoPlayer = document.createElement("video");
-             videoPlayer.src = "./media/"+mediaUrl;
-             videoPlayer.load();
-             videoPlayer.play();
-             videoPlayer.volume = 0.0;
-             TweenMax.from(videoPlayer,1,{opacity:"0"});
-             interval = setInterval(framecheck,30);
-             currentPlayer = videoPlayer;
-             $$("mContainerWrapper").appendChild(currentPlayer);
-
-           }else{
-             imgPlayer = document.createElement("img");
-             imgPlayer.src = "./media/"+mediaUrl;
-             TweenMax.from(imgPlayer,1,{opacity:"0"});
-             timeout = setTimeout(imageframeCheck,5000);
-              currentPlayer = imgPlayer;
-              $$("mContainerWrapper").appendChild(currentPlayer);
-           }
-
-         }
-
-         var   onSocketOpen = function(e){
-           syncmode = true;
-         }
-         var   onSocketError = function(e){
-           syncmode = false;
-         }
-         var   onSocketClose = function(e){
-           syncmode = false;
-         }
-        var   onSocketMessage = function(e){
-          console.log("e.detail.cmd : "+e.detail.cmd+":"+e.detail.msg);
-       		if(e.detail.cmd == "SEQUENCE_PLAY"){
-              dimoutCurrent(e.detail.msg);
-       		}
-       	}
-
-
-
       </script>
   </head>
 
-  <body onload="init();pageInit();" style="background-color:#000">
+  <body onload="init();rb.init();" style="background-color:#000">
     <div id = "logPanel" class="full-popup">
         <div class="full-popup-inner" style="width:90%;">
         <div class="close-button" onclick="closeFullPopup('logPanel')"></div>
@@ -235,9 +97,6 @@ try{
             <div class="form-group">
                 <input type="text" class="form-control" id="cms_list" placeholder="List URL">
             </div>
-            <div class="form-group">
-                <input type="text" class="form-control" id="ismaster" placeholder="MASTER">
-            </div>
           </div>
         </div>
         <div>
@@ -256,13 +115,8 @@ try{
 
     <div id="mContainer">
       <div id="mContainerWrapper" style="">
+
       </di>
-    </div>
-    <div style="position:absolute;left:0;top:60px;z-index:10000">
-      <button onclick = "minVideo();">MIN</button>
-      <button onclick = "maxVideo();">MAX</button>
-      <button onclick = "playSequence();">SEQUENCE START</button>
-      <div id="vstatus" style="color:#FFF"></div>
     </div>
     </body>
   </html>
