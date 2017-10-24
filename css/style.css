@@ -2,6 +2,10 @@
  * Globals
  */
 
+
+
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 /* Links */
 a,
 a:focus,
@@ -93,9 +97,9 @@ body {
   touch-action: manipulation;
 }
 body {
-  color: #fff;
-  text-align: center;
-  text-shadow: 0 1px 3px rgba(0,0,0,.5);
+  color: #000;
+  text-align: left;
+  /*text-shadow: 0 0 3px rgba(0,0,0,.3);*/
 }
 
 

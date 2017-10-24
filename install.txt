@@ -1,0 +1,4 @@
+npm install electron --save-dev --save-exact
+
+
+chokidar - directory monitoring
