@@ -88,7 +88,7 @@ rb.addNewUser = function(obj){
   rb.itemList.appendChild(rb.newitem);
   rb.newitem.style.top = ""+(newitemIndex*rb.itemHeight)+"px";
   rb.newuserScore = 0;
-  rb.newuserInfo = {"pos":0,"uname":userinfo[0],"flag":userinfo[1],"score":0,"user":1,"item":rb.newitem};
+  rb.newuserInfo = {"pos":0,"uname":userinfo[0]+(isKid?"*":""),"flag":userinfo[1],"score":0,"user":1,"item":rb.newitem};
   rb.userlist.push(rb.newuserInfo);
   rb.setitem(rb.newitem,rb.newuserInfo);
   //rb.refitem = null;
@@ -161,24 +161,27 @@ rb.sortOption = function(a,b){
 rb.setitem= function(item,info){
 	var img = item.getElementsByTagName("IMG")[0];
 	  if(info == null){
-		img.className = "team-flag-none";
-		img.src   = "./img/blank.png";
-		item.getElementsByClassName("pos")[0].innerHTML   = "";
-		item.getElementsByClassName("score")[0].innerHTML = "";
-		item.getElementsByClassName("uname")[0].innerHTML = "";
+  		img.className = "team-flag-none";
+  		img.src   = "./img/blank.png";
+  		item.getElementsByClassName("pos")[0].innerHTML   = "";
+  		item.getElementsByClassName("score")[0].innerHTML = "";
+  		item.getElementsByClassName("uname")[0].innerHTML = "";
 	  }else{
-		img.className = "team-flag";
-		img.src = "./img/flags/flag"+(parseInt(info.flag)+1)+".png";
-		item.getElementsByClassName("pos")[0].innerHTML   = ""+info.pos;
-		item.getElementsByClassName("score")[0].innerHTML = ""+info.score;
-		item.getElementsByClassName("uname")[0].innerHTML = ""+info.uname;
+  		img.className = "team-flag";
+  		img.src = "./img/flags/flag"+(parseInt(info.flag)+1)+".png";
+  		item.getElementsByClassName("pos")[0].innerHTML   = ""+info.pos;
+  		item.getElementsByClassName("score")[0].innerHTML = ""+info.score;
+  		item.getElementsByClassName("uname")[0].innerHTML = ""+info.uname;
 	  }
 	}
 
 rb.keyboardlistener = function(e){
   switch (event.key) {
     case "r":
-      if(isGameReady || isGameRunning)return false;
+      if(isGameReady || isGameRunning){
+          return false;
+
+      }
       tcssocket.send("ALL","READY","Donghoon Lee,2,12223344|");
     break;
     case "s":
@@ -222,7 +225,11 @@ rb.onSocketMessage = function(e){
   console.log("rb.isGameRunning : "+isGameRunning);
   if(e.detail.cmd == "READY"){
 	$$("log").innerHTML = "";
-    if(isGameReady && isGameRunning)return false;
+      if(isGameReady || isGameRunning){
+          tcssocket.send("ALL","STOP","-");
+          return false;
+
+      }
       isGameReady = true;
 	    ql.hideQueueList();
       rb.addNewUser(e.detail.msg);
