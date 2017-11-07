@@ -168,7 +168,7 @@ rb.setitem= function(item,info){
   		item.getElementsByClassName("uname")[0].innerHTML = "";
 	  }else{
   		img.className = "team-flag";
-  		img.src = "./img/flags/flag"+(parseInt(info.flag)+1)+".png";
+  		img.src = "./img/flags/flag"+(parseInt(info.flag))+".png";
   		item.getElementsByClassName("pos")[0].innerHTML   = ""+info.pos;
   		item.getElementsByClassName("score")[0].innerHTML = ""+info.score;
   		item.getElementsByClassName("uname")[0].innerHTML = ""+info.uname;
