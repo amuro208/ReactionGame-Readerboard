@@ -1,8 +1,8 @@
 {
-  "name": "reactionGame-LeaderBoard",
+  "name": "reactionGame-GameUI",
   "version": "1.0.0",
-  "description": "reactionGame-LeaderBoard",
-  "repository": "electron/simple-samples",
+  "description": "reactionGame-GameUI",
+  "repository": "",
   "main": "app.js",
   "scripts": {
     "start": "electron app.js"

@@ -8,25 +8,20 @@ ql.newuserScore;
 ql.newuserInfo;
 ql.refindex = -1;
 ql.refitem;
-
+ql.queueContainer;
+ql.queueListContainer;
 ql.init = function(){
-  document.addEventListener("onSocketMessage",rb.onSocketMessage);
-  document.addEventListener("onSocketClose",rb.onSocketClose);
-  document.addEventListener("onSocketError",rb.onSocketError);
-  document.addEventListener("onSocketOpen",rb.onSocketOpen);
+
+  ql.queueContainer = $$("queueContainer");
+  ql.queueListContainer = $$("queueListContainer");
 
   for(var i = 0;i<this.totalItems;i++){
     var item = document.createElement("DIV");
     item.id = "qitem"+i;
-    item.className = "item-wrapper";
-    item.innerHTML = '<div class="queue-item"><div class="arrow"></div><div class="team"><img class="team-flag-none" src = "./img/blank.png"></div><div class="uname"></div></div>';
-    $$("queuePanelContainer").appendChild(item);
+    item.className = "queue-list";
+    item.innerHTML = '<div class="inner-row"><div class="item team"><img class="team-flag-none" src = "./img/blank.png"></div><div class="item uname"></div></div>';
+    ql.queueListContainer.appendChild(item);
   }
-  //ql.showQueueList('{"userqueues":[{"uname":" ","flag":"-1"},{"uname":"Marcus Joy","flag":"3"}]}');
-
-  //ql.showQueueList('{"userqueues":[{"uname":"Marcus Joy","flag":"3"},{"uname":"Marcus Joy","flag":"3"},{"uname":"Luis Youn","flag":"4"},{"uname":"Miyoung Kang","flag":"2"},{"uname":"Luis Youn","flag":"4"},{"uname":"Amuro Lee","flag":"1"},{"uname":"Marcus Joy","flag":"3"},{"uname":"Marcus Joy","flag":"3"},{"uname":"Miyoung Kang","flag":"2"},{"uname":"Amuro Lee","flag":"1"}]}');
-
-
 }
 
 ql.showQueueList = function(msg){
@@ -58,10 +53,10 @@ ql.showQueueList = function(msg){
   			cnt++;
   		}
   	}
-  	$$("queuePanelContainer").style.top = "0px";
+  	ql.queueListContainer.style.top = "0px";
   	var h = this.itemHeight*this.totalItems+65;
-  	TweenMax.to($$("queuePanel"),0.3,{height:h+"px",ease:Power2.easeOut});
-  	TweenMax.to($$("queuePanelContainer"),0.3,{delay:0.6,top:"-"+64+"px",ease:Power2.easeOut});
+  	TweenMax.to(ql.queueContainer,0.3,{height:h+"px",ease:Power2.easeOut});
+  	TweenMax.to(ql.queueListContainer,0.3,{delay:0.6,top:"-"+64+"px",ease:Power2.easeOut});
 
   	setTimeout(function(){
   		ql.hideQueueList();
@@ -69,7 +64,7 @@ ql.showQueueList = function(msg){
 
 }
 ql.hideQueueList = function(){
-	TweenMax.to($$("queuePanel"),0.3,{height:"0px",ease:Power2.easeOut,onComplete:function(){
+	TweenMax.to(ql.queueContainer,0.3,{height:"0px",ease:Power2.easeOut,onComplete:function(){
     rb.footer.style.display = "block";
   }});
 }

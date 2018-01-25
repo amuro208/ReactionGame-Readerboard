@@ -4,7 +4,7 @@ var url = require('url')           // https://nodejs.org/api/url.html
 
 var window = null
 
-
+var debugMode = true;
 /*
 var SerialPort = require('serialport');
    var port = new SerialPort('COM3', {baudRate: 9600,  'disconnectedCallback': function () {
@@ -79,24 +79,28 @@ var SerialPort = require('serialport');
 // Wait until the app is ready
 app.on('ready', function () {
   // Create a new window
-  window = new BrowserWindow({
-    // Set the initial width to 500px
-    width: 1080,
-    // Set the initial height to 400px
-    height: 3840,
+  if(debugMode){
+    window = new BrowserWindow({
+      alwaysOnTop :false,
+      width: 1080,
+      height: 1080,
+      frame:true,
+      titleBarStyle: 'hiddenInset',
+      backgroundColor: "#111",
+      show: false
+    });
+  }else{
+    window = new BrowserWindow({
+      alwaysOnTop :true,
+      width: 1080,
+      height: 3840,
+      frame:false,
+      titleBarStyle: 'hiddenInset',
+      backgroundColor: "#111",
+      show: false
+    })
+  }
 
-    alwaysOnTop :true,
-    frame:false,
-    // Show the minimize/maximize buttons inset in the window on macOS
-    titleBarStyle: 'hiddenInset',
-
-
-    // Set the default background color of the window to match the CSS
-    // background color of the page, this prevents any white flickering
-    backgroundColor: "#111",
-    // Don't show the window until it ready, this prevents any white flickering
-    show: false
-  })
 
   // Load a URL in the window to the local index.html path
   window.loadURL(url.format({
@@ -109,8 +113,14 @@ app.on('ready', function () {
   window.once('ready-to-show', function () {
     window.show();
    // window.setFullScreen(true);
-    window.setSize(1080,3840);
-	  window.setPosition(0,0);
+   if(debugMode){
+     //window.setSize(1080,3840);
+     //window.setPosition(0,0);
+   }else{
+     window.setSize(1080,3840);
+     window.setPosition(0,0);
+   }
+
 	  //window.toggleDevTools();
   })
 /*

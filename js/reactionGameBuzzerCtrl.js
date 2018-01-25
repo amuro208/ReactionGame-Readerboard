@@ -29,7 +29,7 @@
 		sound.whitle_short = new Audio('./sound/whitle_short.mp3');
 		sound.success = new Audio('./sound/success.mp3');
 	}
-	
+
 	var strBuff = "";
 		arduino.on('data', function(d) {
 		  var data = ""+d;
@@ -79,16 +79,16 @@
 	game.onArduinoData = function(data){
 		log("What I get : "+data.trim());
 		if(data.trim() == ("bf"+game.currentOn)){
-			if(isGameRunning){
+			if(tcsapp.isGameRunning){
 				game.rId = setTimeout(game.randomOn,20);
 				if(rb.newuserScore>5 &&   rb.newuserScore%10 == 0){
 					sound.success.play();
 				}
 			}
 		}else if(data.trim() == ("bd"+game.currentOn)){
-			if(isGameRunning){
+			if(tcsapp.isGameRunning){
 				sound.whitle_short.play();
-				tcssocket.send("ALL","ADDPOINT","-");
+				tcsapp.tcssocket.send("ALL","ADDPOINT","-");
 				rb.addScore();
 			}
 		}
@@ -96,14 +96,14 @@
 
 
 	game.randomOn = function(){
-		if(isGameRunning){
+		if(tcsapp.isGameRunning){
 			game.currentOn = parseInt(game.seqCurrent[game.seqNow]);
 			game.sendToArduino("bo"+game.currentOn);
 			game.seqNow++;
 			if(game.seqNow == game.seqTotal)game.seqNow = 0;
-			if(conf.infiniteTest == "Y"){
+			if(tcsapp.conf.infiniteTest == "Y"){
 			  setTimeout(function(){
-			  if(isGameRunning)game.sendToArduino("bf"+game.currentOn);
+			  if(tcsapp.isGameRunning)game.sendToArduino("bf"+game.currentOn);
 			  },Math.floor(Math.random() * 900) + 50);
 			}
 		}
@@ -148,11 +148,11 @@
 			do{
 				if(game.isKid){
 					r = Math.ceil(Math.random()*5)+2;
-					
+
 				}else{
 					r = Math.ceil(Math.random()*game.numButton);
 				}
-				
+
 			}while(pr>0 && r==pr || game.isDisableNumber(r));
 			//trace(r);
 			arr.push(r);

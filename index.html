@@ -4,228 +4,24 @@
     <head>
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="apple-mobile-web-app-capable" content="yes">
-      <meta name="apple-touch-fullscreen" content="yes">
-      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-      <meta id="extViewportMeta" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
       <title>ReActionWall LeaderBoard</title>
-      <script src="./js/TweenMax.min.js"  type="text/javascript"></script>
-      <script src="./js/tcsConf.js"       type="text/javascript"></script>
-      <script src="./js/tcsSocket.js"     type="text/javascript"></script>
-      <script src="./js/tcsApp.js"        type="text/javascript"></script>
+      <script src="./js/common/json2.js"        type="text/javascript"></script>
+      <script src="./js/common/TweenMax.min.js" type="text/javascript"></script>
+      <script src="./js/common/common.js"        type="text/javascript"></script>
+      <script src="./js/common/CMS.js"        type="text/javascript"></script>
+      <script src="./js/common/pageBase.js"        type="text/javascript"></script>
+      <script src="./js/common/WebSocket.js"    type="text/javascript"></script>
+      <script src="./js/common/panelConf.js"       type="text/javascript"></script>
+      <script src="./js/common/panelDebug.js"       type="text/javascript"></script>
+
       <script src="./js/reactionGameBuzzerCtrl.js" type="text/javascript"></script>
       <script src="./js/reactionGameLeaderboard.js" type="text/javascript"></script>
-	  <script src="./js/queueList.js" type="text/javascript"></script>
+	    <script src="./js/queueList.js" type="text/javascript"></script>
+      <script src="./js/tcsApp.js"        type="text/javascript"></script>
+
       <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
       <link rel="stylesheet" type="text/css" href="./css/style.css">
-
-      <style>
-          html, body {margin: 0; padding: 0; overflow: hidden}
-          #mContainer{
-            margin: 0; padding: 0;
-          }
-
-          #mContainerWrapper{
-            position:relative;
-            vertical-align: top;
-			overflow:hidden;
-            border:1px dashed rgba(0,0,0,0);
-              /*position:relative;
-              width:100%;
-              border:2px dashed #00FF00;*/
-          }
-          #newitem{
-            position:absolute;
-            top:0px;
-            left:1%;
-            width:98%;
-
-          }
-          .board-newitem{
-            width:100%;
-            height:60px;
-
-            /*margin-bottom:5px;*/
-            /*box-shadow: 0 0 3px rgba(0,0,0,0.6);*/
-            display:table;
-            vertical-align: middle;
-            background-image: url(./img/list_bg_over_.png);  background-position: left; background-size:auto 100%;
-          }
-
-          #newitem .pos{
-            display:table-cell;
-            font-size: 1.4em;
-            font-weight: bold;
-            padding-left:19px;
-            font-family:'Roboto-Bold', sans-serif;
-            width:10%;
-            color:#fff;
-            text-align:center;
-            vertical-align: middle;
-          }
-          #newitem .team{
-            display:table-cell;
-            width:9%;
-            padding-left:8px;
-            vertical-align: middle;
-          }
-          #newitem .team img{
-            width:60px;
-            height:40px;
-            border:1px solid #DDD;
-          }
-          #newitem .uname{
-            display:table-cell;
-            font-size: 1.7em;
-            padding-left:8px;
-            font-weight: bold;
-            font-family:'Roboto-Bold', sans-serif;
-            color:#fff;
-            text-align:left;
-            vertical-align: middle;
-          }
-          #newitem .score{
-            display:table-cell;
-            padding-right:20px;
-            padding-top:2px;
-            font-size: 1.7em;
-            font-weight: bold;
-            font-family:'Roboto-Bold', sans-serif;
-            color:#FFF;
-            width:10%;
-            text-align:right;
-            vertical-align: middle;
-
-          }
-
-
-
-
-
-          .item-wrapper{
-            /*border-left: 3px solid #666666;*/
-            width:96%;
-            margin:auto;
-			         margin-top:0px;
-          }
-
-		  .queue-item{
-
-            /*margin-bottom:5px;*/
-            border-bottom: 1px solid rgba(255,255,255,0.3);
-            display:table;
-            width:100%;
-            height:65px;
-            vertical-align: middle;
-          }
-		  .queue-item .arrow{
-            display:table-cell;
-            width:10%;
-            vertical-align: middle;
-          }
-          .queue-item .team{
-            display:table-cell;
-            width:10%;
-            vertical-align: middle;
-          }
-          .queue-item .team-flag{
-            width:53px;
-            height:34px;
-            border:3px solid rgba(255,255,255,1);
-          }
-		     .queue-item .team-flag-none{
-            width:60px;
-            height:40px;
-			      border:3px solid rgba(255,255,255,0);
-          }
-          .queue-item .uname{
-            display:table-cell;
-            width:70%;
-            font-size: 1.7em;
-            font-weight: bold;
-            font-family:'Roboto-Bold', sans-serif;
-            color:#FFF;
-            text-align:left;
-            vertical-align: middle;
-          }
-
-
-          .board-item{
-            background-color:#FFF;
-            /*margin-bottom:5px;*/
-            border-bottom: 5px solid #EEE;
-            display:table;
-            width:100%;
-            height:65px;
-            vertical-align: middle;
-          }
-          .board-item .pos{
-            display:table-cell;
-            font-size: 1.4em;
-            font-weight: bold;
-            font-family:'Roboto-Bold', sans-serif;
-            width:10%;
-			color:#5c5c5c;
-            text-align:center;
-            vertical-align: middle;
-          }
-          .board-item .team{
-            display:table-cell;
-            width:9%;
-            vertical-align: middle;
-          }
-
-		  .board-item .team-flag{
-            width:60px;
-            height:40px;
-			border:1px solid #DDD;
-          }
-          .board-item .team-flag-none{
-            width:60px;
-            height:40px;
-			border:none;
-          }
-          .board-item .uname{
-            display:table-cell;
-            width:70%;
-            font-size: 1.7em;
-            font-weight: bold;
-            font-family:'Roboto-Bold', sans-serif;
-            color:#4c4c4c;
-            text-align:left;
-            vertical-align: middle;
-
-          }
-          .board-item .score{
-            display:table-cell;
-            padding-right:10px;
-            padding-top:2px;
-            width:10%;
-            font-size: 1.7em;
-            font-weight: bold;
-            font-family:'Roboto-Bold', sans-serif;
-            color:#FFF;
-            width:20%;
-            text-align:right;
-            vertical-align: middle;
-            background-image: url(./img/slider_shapes.png);  background-position: center; background-size:auto 100%;
-
-
-          }
-
-          .board-title{
-            display:inline-block;
-            font-size: 1.0em;
-            font-weight: bold;
-            font-family:'Roboto-Bold', sans-serif;
-            color:#FFF;
-            height:20px;
-            text-align:left;
-            vertical-align: bottom;
-            margin-top:30px;
-            /*border: 1px dashed #CCC;*/
-          }
-      </style>
+      <link rel="stylesheet" type="text/css" href="./css/style-leaderboard.css">
 
       <script type="text/javascript">
 			document.addEventListener("keydown", function (e) {
@@ -235,6 +31,12 @@
 					}
 				});
 
+
+        function onload(){
+          tcsapp.init();
+          game.init();
+          initPageAfterLoaded();
+        }
         function initPageAfterLoaded(){
           setTimeout(function(){
             rb.init();
@@ -250,94 +52,58 @@
       </script>
   </head>
 
-  <body onload="init();game.init();initPageAfterLoaded();" style="background-image: url(./img/f5WS_webpagebackground-1.jpg); background-repeat:repeat-y; background-position: center;background-size:1080px 100%;">
-    <div id = "logPanel" class="full-popup">
-        <div class="full-popup-inner" style="width:90%;">
-        <div class="close-button" onclick="closeFullPopup('logPanel')"></div>
-        <h1>DEBUG CONSOLE</h1>
-        <div style="padding-top:30px;height:80%">
-          <textarea  class="scrollable" id="log"></textarea >
-        </div>
-        <div style="margin-top:15px;">
-          <input id="msg" class="form-control" type="textbox" style="width:84%;display:inline-block;vertical-align:middle;"/>
-          <button onclick="tcssocket.sendMessage()" class="btn btn-md btn-default" style="min-width:80px;width:15%;display:inline-block;">Send</button>
-          </div>
-        </div>
-      </div>
+    <body onload="onload();" style="background-color:#000">
+      <!-- CONFIGURATION -->
+      <div id = "panelConf" class="full-popup"></div>
+
+      <!-- DEBUGGING PANEL-->
+      <div id = "panelDebug" class="full-popup"></div>
+
+      <div class="hidden-button lt" onclick="tcsapp.conf.show();" alt = "Open Configuration"></div>
+      <div class="hidden-button rt" onclick="tcsapp.debug.show();" alt = "Open Log Panel"></div>
+
+
+      <div class="site-wrapper">
+        <div class="site-wrapper-inner">
+          <div class="site-container">
+            <!-- Header -->
+      			<div class="masthead">
+      				<img src="./img/logo-top.png" style="margin-top:74px"/>
+      			</div>
+
+            <div class="mastbody">
+
+              <!-- normally pages are set under mastbody -->
+              <!-- Queue list -->
+        			<div id="queueContainer" class="queue-container">
+        				<h1 class="queue-title"> Who is next?</h1>
+        				<div class="queue-indicator"><img src="./img/arrow_queue.png" /></div>
+
+        				<div class="queue-container-wrapper">
+        					<div id = "queueListContainer" class="queue-list-container">
+        					</div>
+        				</div>
+        			</div>
+
+              <!-- Board-titles -->
+        			<div class="board-title">
+                <div class="inner-row">
+          				<div class="item pos">pos</div>
+          				<div class="item team">team</div>
+          				<div class="item uname">name</div>
+          				<div class="item score">pt</div>
+                </div>
+        			</div>
+              <!-- Board-list -->
+        			<div id="mContainerList" class="board-list-container">
+        			</div>
+            </div>
+            <!-- Footer -->
+      			<div id="mContainerFooter" class="mastfoot">
+      				<img src="./img/logo-bottom.png" style="margin-top:50px"/>
+      			</div>
+    		</div>
+    	</div>
     </div>
-
-    <div id = "configuration" class="full-popup">
-      <div class="full-popup-inner" style="width:70%;">
-        <div class="close-button" onclick="closeFullPopup('configuration')"></div>
-            <h1>CONFIGURATION</h1>
-        <div id="configurationStatus"></div>
-        <div style="padding-top:30px;">
-          <div>
-            <div class="form-group">
-                <input type="text" class="form-control" id="cmd_ip" placeholder="IP">
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control" id="cmd_port" placeholder="PORT">
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control" id="cmd_id" placeholder="ID">
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control" id="cms_ip" placeholder="URL List">
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control" id="cms_list" placeholder="URL List">
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control" id="cms_clear" placeholder="URL Clear Leaderboard">
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control" id="infiniteTest" placeholder="TEST LOOP">
-            </div>
-          </div>
-        </div>
-        <div>
-          <div style="text-align:center">
-            <button onclick="tcssocket.connect()" id = "btn-connect" class="btn btn-lg btn-default">Connect</button>
-            <button onclick="conf.save()"         id = "btn-save"    class="btn btn-lg btn-default">Save</button>
-            <button onclick="tcssocket.quit()"    id = "btn-quit"    class="btn btn-lg btn-default">Quit</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="hidden-button lt" onclick="openFullPopup('configuration')" alt = "Open Configuration"></div>
-    <div class="hidden-button rt" onclick="openFullPopup('logPanel')" alt = "Open Log Panel"></div>
-
-
-    <div id="mContainer" style="">
-        <div style="width:90%; height:3840px; margin:auto; background-color:#EEE">
-			<div style="height:159px;width:100%;background-color:#FFF;text-align:center">
-				<img src="./img/logo-top.png" style="margin-top:74px"/>
-			</div>
-			<div id = "queuePanel" style="position:relative;overflow:hidden;display:block;height:0px;background-color:#00acb3;">
-				<h1 style="color:#FFF;padding-top:30px;padding-left:50px;"> Who is next?</h1>
-				<div style="position:absolute;top:98px;left:50px;z-index:1000"><img src="./img/arrow_queue.png" /></div>
-				<div id = "queuePanelWrapper" style="position:relative;width:100%;height:600px;overflow:hidden;">
-					<div id = "queuePanelContainer" style="position:absolute;top:0px;left:0px;width:100%;z-index:1000">
-
-					</div>
-				</div>
-
-			</div>
-			<div style="height:60px;padding-left:43px;background-color:#d91883;margin-bottom:10px;vertical-align:bottom">
-				<div class="board-title" style="width:5%;text-align:center">pos</div>
-				<div class="board-title" style="width:11%;text-align:center">team</div>
-				<div class="board-title" style="width:74%">name</div>
-				<div class="board-title" style="width:8% ;text-align:center">pt</div>
-			</div>
-			<div id="mContainerWrapper">
-
-			</div>
-			<div id ="mContainerFooter" style="position:absolute;height:150px;width:90%;bottom:0;z-index:1000;text-align:center;vertical-align:middle">
-				<img src="./img/logo-bottom.png" style="margin-top:50px"/>
-			</div>
-		</div>
-	</div>
-</body>
-  </html>
+  </body>
+</html>

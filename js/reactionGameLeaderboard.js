@@ -25,7 +25,7 @@ rb.init = function(){
   document.addEventListener("onSocketOpen",rb.onSocketOpen);
   window.addEventListener("keydown", rb.keyboardlistener);
 
-  rb.itemList = $$("mContainerWrapper");
+  rb.itemList = $$("mContainerList");
   rb.footer = $$("mContainerFooter");
 
   var h = window.innerHeight - rb.itemList.offsetTop - rb.footer.offsetHeight;
@@ -37,15 +37,16 @@ rb.init = function(){
   for(var i = 0;i<this.totalItems;i++){
     var item = document.createElement("DIV");
     item.id = "item"+i;
-    item.className = "item-wrapper";
-    item.innerHTML = '<div class="board-item"><div class="pos"></div><div class="team"><img class="team-flag-none" src = "./img/blank.png"></div><div class="uname"></div><div class="score"></div></div>';
+    item.className = "board-list";
+    item.innerHTML = '<div class="inner-row"><div class="item pos"></div><div class="item team"><img class="team-flag-none" src = "./img/blank.png"></div><div class="item  uname"></div><div class="item score"></div></div>';
     rb.itemList.appendChild(item);
     if(i == this.totalItems-1)rb.lastitem = item;
   }
 
   rb.newitem = document.createElement("DIV");
   rb.newitem.id = "newitem";
-  rb.newitem.innerHTML = '<div class="board-newitem"><div class="pos"></div><div class="team"><img class="team-flag" src = ""></div><div class="uname"></div><div class="score"></div></div>';
+  rb.newitem.className = "board-newitem";
+  rb.newitem.innerHTML = '<div class="inner-row"><div class="item pos"></div><div class="item team"><img class="team-flag" src = ""></div><div class="item uname"></div><div class="item score"></div></div>';
 
   rb.queryRanking();
 }
@@ -120,29 +121,28 @@ rb.addScore = function(){
 
   var uindex = rb.userlist.indexOf(rb.newuserInfo);
   console.log("uindex : "+uindex);
-
   if(uindex<rb.userlist.length-1){
-	var targetY = uindex*rb.itemHeight;
-
-	if(targetY != rb.newitem.offsetTop){
-		for(var i = 0;i<rb.itemList.childNodes.length;i++){
-			var item = rb.itemList.childNodes[i];
-			if(item.id != undefined){
-				if(item.offsetTop == targetY){
-				 rb.refitem = item;
-				 break;
-				}
-			}
-		}
-		if(rb.olditem){
-		  TweenMax.to(rb.olditem,0.3,{marginTop:"0px"});
-		}
-		TweenMax.to(rb.newitem,0.3,{top:targetY+"px"});
-		if(rb.refitem){
-			TweenMax.to(rb.refitem,0.3,{marginTop:rb.itemHeight+"px"});
-			rb.olditem = rb.refitem;
-		}
-	}
+  	var targetY = uindex*rb.itemHeight;
+    console.log("targetY : "+targetY+"/"+rb.newitem.offsetTop+"::::::"+rb.itemList.offsetTop);
+  	if(targetY != rb.newitem.offsetTop){
+  		for(var i = 0;i<rb.itemList.childNodes.length;i++){
+  			var item = rb.itemList.childNodes[i];
+  			if(item.id != undefined){
+  				if(item.offsetTop == targetY){
+  				 rb.refitem = item;
+  				 break;
+  				}
+  			}
+  		}
+  		if(rb.olditem){
+  		  TweenMax.to(rb.olditem,0.3,{marginTop:"0px"});
+  		}
+  		TweenMax.to(rb.newitem,0.3,{top:(targetY)+"px"});
+  		if(rb.refitem){
+  			TweenMax.to(rb.refitem,0.3,{marginTop:rb.itemHeight+"px"});
+  			rb.olditem = rb.refitem;
+  		}
+  	}
 
   }
 }
@@ -178,32 +178,41 @@ rb.setitem= function(item,info){
 rb.keyboardlistener = function(e){
   switch (event.key) {
     case "r":
-      if(isGameReady || isGameRunning){
+      if(tcsapp.isGameReady || tcsapp.isGameRunning){
           return false;
-
       }
-      tcssocket.send("ALL","READY","Donghoon Lee,2,12223344|");
+      tcsapp.tcssocket.send("ALL","READY","Donghoon Lee,2,12223344|");
     break;
     case "s":
-      if(!isGameReady || isGameRunning)return false;
-      tcssocket.send("ALL","START","-");
+      if(!tcsapp.isGameReady || tcsapp.isGameRunning)return false;
+      tcsapp.tcssocket.send("ALL","START","-");
     break;
     case "t":
-      if(!isGameRunning)return false;
-      tcssocket.send("ALL","TIMEOUT","-");
+      if(!tcsapp.isGameRunning)return false;
+      tcsapp.tcssocket.send("ALL","TIMEOUT","-");
     break;
     case "c":
-      //if(!isGameRunning)return false;
-      tcssocket.send("ALL","STOP","-");
+      //if(!tcsapp.isGameRunning)return false;
+      tcsapp.tcssocket.send("ALL","STOP","-");
     break;
 	case "l":
-      //if(!isGameRunning)return false;
-      tcssocket.send("ALL","BOARD_CLEARD","-");
+      //if(!tcsapp.isGameRunning)return false;
+      tcsapp.tcssocket.send("ALL","BOARD_CLEARD","-");
     break;
+    case "q":
+      var qlist = {"userqueues":[]};
+          qlist.userqueues.push({"uname":"Amuro Lee","flag":2});
+          qlist.userqueues.push({"uname":"Miyoung Kang","flag":3});
+          qlist.userqueues.push({"uname":"Gundam 78","flag":4});
+          qlist.userqueues.push({"uname":"Macross 83","flag":5});
+          qlist.userqueues.push({"uname":"Nadia 76","flag":6});
+      var jstr = JSON.stringify(qlist);
+      tcsapp.tcssocket.send("ALL","QUEUE_LIST",jstr);
+      break;
     case "ArrowUp":
-      if(!isGameRunning)return false;
+      if(!tcsapp.isGameRunning)return false;
       rb.addScore();
-      tcssocket.send("ALL","ADDPOINT","-");
+      tcsapp.tcssocket.send("ALL","ADDPOINT","-");
     break;
 
   }
@@ -222,28 +231,28 @@ rb.onSocketClose = function(e){
 }
 rb.onSocketMessage = function(e){
   console.log("e.detail.cmd : "+e.detail.cmd+":"+e.detail.msg);
-  console.log("rb.isGameRunning : "+isGameRunning);
+  console.log("rb.tcsapp.isGameRunning : "+tcsapp.isGameRunning);
   if(e.detail.cmd == "READY"){
-	$$("log").innerHTML = "";
-      if(isGameReady || isGameRunning){
-          tcssocket.send("ALL","STOP","-");
+	   $$("debugTxtArea").innerHTML = "";
+      if(tcsapp.isGameReady || tcsapp.isGameRunning){
+          tcsapp.tcssocket.send("ALL","STOP","-");
           return false;
 
       }
-      isGameReady = true;
+      tcsapp.isGameReady = true;
 	    ql.hideQueueList();
       rb.addNewUser(e.detail.msg);
 
 
     }else if(e.detail.cmd == "START"){
-      if(isGameRunning || !isGameReady)return false;
-         isGameRunning = true;
+      if(tcsapp.isGameRunning || !tcsapp.isGameReady)return false;
+         tcsapp.isGameRunning = true;
          game.gameStart();
 
     }else if(e.detail.cmd == "STOP"){
-      //if(!isGameReady)return false;
-      isGameRunning = false;
-      isGameReady = false;
+      //if(!tcsapp.isGameReady)return false;
+      tcsapp.isGameRunning = false;
+      tcsapp.isGameReady = false;
       game.gameStop();
 
       for(var i=0;i<rb.userlist.length;i++){
@@ -256,8 +265,8 @@ rb.onSocketMessage = function(e){
       //rb.queryRanking();
 
     }else if(e.detail.cmd == "TIMEOUT"){
-      if(!isGameRunning || !isGameReady)return false;
-      isGameRunning = false;
+      if(!tcsapp.isGameRunning || !tcsapp.isGameReady)return false;
+      tcsapp.isGameRunning = false;
       game.timeout();
 
     }else if(e.detail.cmd == "BOARD_CLEARD"){
@@ -291,11 +300,12 @@ rb.resetNewItem = function(){
   }
   rb.refitem = null;
   rb.olditem = null;
-  isGameReady = false;
+  tcsapp.isGameReady = false;
 }
+
 rb.queryRanking = function(){
-    log("queryRanking : "+"http://"+conf.CMS_IP+conf.CMS_LIST);
-    postAjax("http://"+conf.CMS_IP+conf.CMS_LIST, userData, function(readyState,status,data){
+    log("queryRanking : "+"http://"+tcsapp.conf.CMS_IP+tcsapp.conf.CMS_LIST);
+    postAjax("http://"+tcsapp.conf.CMS_IP+tcsapp.conf.CMS_LIST, {}, function(readyState,status,data){
       log("readyState : "+readyState);
       log("status : "+status);
       log("data : "+data);
