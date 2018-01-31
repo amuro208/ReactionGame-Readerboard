@@ -1,0 +1,20 @@
+{
+ "current": {
+  "CMD_SOCKET_ID": "1",
+  "CMD_SOCKET_IP": "127.0.0.1",
+  "CMD_SOCKET_PORT": "9000",
+  "CMS_IP": "127.0.0.1",
+  "CMS_CLEAR_BOARD": "/app/codeigniter/index.php/upload/qsrankclear/",
+  "CMS_LIST": "/app/codeigniter/index.php/upload/qsrank/",
+  "APP_INFINITE_TEST": "N"
+ },
+ "default": {
+  "CMD_SOCKET_ID": 1,
+  "CMD_SOCKET_IP": "127.0.0.1",
+  "CMD_SOCKET_PORT": 9000,
+  "CMS_IP": "127.0.0.1",
+  "CMS_CLEAR_BOARD": "/app/codeigniter/index.php/upload/qsrankclear/",
+  "CMS_LIST": "/app/codeigniter/index.php/upload/qsrank/",
+  "APP_INFINITE_TEST": "N"
+ }
+}

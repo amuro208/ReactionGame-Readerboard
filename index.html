@@ -11,6 +11,7 @@
       <script src="./js/common/CMS.js"        type="text/javascript"></script>
       <script src="./js/common/pageBase.js"        type="text/javascript"></script>
       <script src="./js/common/WebSocket.js"    type="text/javascript"></script>
+      <script src="./js/common/Configuration.js"       type="text/javascript"></script>
       <script src="./js/common/panelConf.js"       type="text/javascript"></script>
       <script src="./js/common/panelDebug.js"       type="text/javascript"></script>
 
@@ -34,21 +35,7 @@
 
         function onload(){
           tcsapp.init();
-          game.init();
-          initPageAfterLoaded();
         }
-        function initPageAfterLoaded(){
-          setTimeout(function(){
-            rb.init();
-            ql.init();
-
-          },2000);
-
-        }
-        document.addEventListener("onload",function(e){
-          log("document : onload"+e);
-
-        })
       </script>
   </head>
 
@@ -59,8 +46,8 @@
       <!-- DEBUGGING PANEL-->
       <div id = "panelDebug" class="full-popup"></div>
 
-      <div class="hidden-button lt" onclick="tcsapp.conf.show();" alt = "Open Configuration"></div>
-      <div class="hidden-button rt" onclick="tcsapp.debug.show();" alt = "Open Log Panel"></div>
+      <div class="hidden-button lt" onclick="tcsapp.panelConf.show();" alt = "Open Configuration"></div>
+      <div class="hidden-button rt" onclick="tcsapp.panelDebug.show();" alt = "Open Log Panel"></div>
 
 
       <div class="site-wrapper">

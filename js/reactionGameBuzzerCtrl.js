@@ -101,7 +101,7 @@
 			game.sendToArduino("bo"+game.currentOn);
 			game.seqNow++;
 			if(game.seqNow == game.seqTotal)game.seqNow = 0;
-			if(tcsapp.conf.infiniteTest == "Y"){
+			if(conf.infiniteTest == "Y"){
 			  setTimeout(function(){
 			  if(tcsapp.isGameRunning)game.sendToArduino("bf"+game.currentOn);
 			  },Math.floor(Math.random() * 900) + 50);

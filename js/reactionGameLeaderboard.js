@@ -304,8 +304,8 @@ rb.resetNewItem = function(){
 }
 
 rb.queryRanking = function(){
-    log("queryRanking : "+"http://"+tcsapp.conf.CMS_IP+tcsapp.conf.CMS_LIST);
-    postAjax("http://"+tcsapp.conf.CMS_IP+tcsapp.conf.CMS_LIST, {}, function(readyState,status,data){
+    log("queryRanking : "+"http://"+conf.CMS_IP+conf.CMS_LIST);
+    postAjax("http://"+conf.CMS_IP+conf.CMS_LIST, {}, function(readyState,status,data){
       log("readyState : "+readyState);
       log("status : "+status);
       log("data : "+data);
